@@ -31,7 +31,7 @@ export function SiteNav() {
     const isActive =
       href === "/" ? pathname === href : pathname.startsWith(href);
 
-    return `flex min-h-14 flex-1 flex-col items-center justify-center gap-1 rounded-2xl px-2 py-2 text-[11px] font-semibold transition ${
+    return `flex min-h-14 min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-2xl px-1.5 py-2 text-[11px] font-semibold leading-tight transition ${
       isActive
         ? "bg-app-card text-app-text shadow-sm"
         : "text-app-muted hover:bg-app-card hover:text-app-text"
@@ -41,9 +41,9 @@ export function SiteNav() {
   return (
     <>
       <header className="sticky top-0 z-30 border-b border-app-border bg-app-glass backdrop-blur-2xl">
-        <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 sm:px-8 sm:py-4">
-          <Link href="/" className="flex items-center gap-3">
-            <span className="group relative grid h-14 w-14 place-items-center sm:h-20 sm:w-20">
+        <nav className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-3 py-2 sm:px-5 sm:py-3 lg:px-8 lg:py-4">
+          <Link href="/" className="flex min-w-0 items-center gap-2.5 sm:gap-3">
+            <span className="group relative grid h-12 w-12 flex-none place-items-center sm:h-16 sm:w-16 lg:h-20 lg:w-20">
               <span className="absolute inset-2 rounded-full bg-app-accent/20 blur-xl transition duration-500 group-hover:scale-125 group-hover:bg-app-accent/30" />
               <Image
                 src="/images/albums/logo-image/family-adventures-logo.png"
@@ -54,17 +54,17 @@ export function SiteNav() {
                 className="animated-logo relative h-full w-full object-contain drop-shadow-xl transition duration-500 group-hover:scale-110 group-hover:rotate-3"
               />
             </span>
-            <span className="block">
-              <span className="block text-sm font-semibold leading-5 text-app-text sm:text-base">
+            <span className="block min-w-0">
+              <span className="block truncate text-sm font-semibold leading-5 text-app-text sm:text-base">
                 Online Family Album
               </span>
-              <span className="block text-[11px] font-medium text-app-subtle sm:text-xs">
+              <span className="block truncate text-[11px] font-medium text-app-subtle sm:text-xs">
                 Private family memories
               </span>
             </span>
           </Link>
 
-          <div className="hidden items-center gap-2 sm:flex">
+          <div className="hidden items-center gap-2 lg:flex">
             <Link href="/" className={navLinkClass("/")}>
               <Home className="h-4 w-4" />
               Welcome
@@ -115,7 +115,7 @@ export function SiteNav() {
             <button
               type="button"
               onClick={handleLogout}
-              className="grid h-11 w-11 place-items-center rounded-full bg-app-card text-app-muted shadow-sm sm:hidden"
+              className="grid h-11 w-11 flex-none place-items-center rounded-full bg-app-card text-app-muted shadow-sm lg:hidden"
               aria-label="Sign out"
             >
               <LogOut className="h-5 w-5" />
@@ -124,8 +124,8 @@ export function SiteNav() {
         </nav>
       </header>
 
-      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-app-border bg-app-glass px-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] pt-2 backdrop-blur-2xl sm:hidden">
-        <div className="mx-auto flex max-w-md gap-2 rounded-[1.75rem] border border-app-border bg-app-card/55 p-2 shadow-2xl shadow-black/10">
+      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-app-border bg-app-glass px-2.5 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] pt-2 backdrop-blur-2xl lg:hidden">
+        <div className="mx-auto flex max-w-md gap-1.5 rounded-[1.75rem] border border-app-border bg-app-card/55 p-1.5 shadow-2xl shadow-black/10">
           <Link href="/" className={mobileTabClass("/")}>
             <Home className="h-5 w-5" />
             Home

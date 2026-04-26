@@ -66,9 +66,14 @@ body {
   color: var(--foreground);
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   min-height: 100vh;
+  overflow-x: clip;
 }
 
-@media (max-width: 639px) {
+html {
+  overflow-x: clip;
+}
+
+@media (max-width: 1023px) {
   body {
     padding-bottom: calc(env(safe-area-inset-bottom) + 6.5rem);
   }
@@ -102,6 +107,18 @@ input {
   min-height: 44px;
 }
 
+h1,
+h2,
+h3,
+p,
+legend,
+a,
+button,
+label,
+span {
+  overflow-wrap: anywhere;
+}
+
 ::selection {
   background: var(--app-accent);
   color: var(--app-bg);
@@ -113,6 +130,7 @@ input {
   box-shadow: var(--app-shadow-soft);
   backdrop-filter: blur(22px) saturate(1.35);
   -webkit-backdrop-filter: blur(22px) saturate(1.35);
+  min-width: 0;
 }
 
 .liquid-panel {
@@ -121,6 +139,7 @@ input {
   box-shadow: var(--app-shadow);
   backdrop-filter: blur(28px) saturate(1.45);
   -webkit-backdrop-filter: blur(28px) saturate(1.45);
+  min-width: 0;
 }
 
 .liquid-button {

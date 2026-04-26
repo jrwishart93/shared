@@ -9,7 +9,7 @@ import { StorySection } from "@/components/StorySection";
 
 export function CampingTripStory({ album }: { album: Album }) {
   return (
-    <main className="min-h-[calc(100vh-73px)] bg-app-bg px-5 py-8 sm:px-8 lg:py-12">
+    <main className="min-h-[calc(100vh-73px)] bg-app-bg px-4 py-6 sm:px-6 md:py-8 lg:px-8 lg:py-12">
       <div className="mx-auto max-w-6xl space-y-6 sm:space-y-8">
         <AlbumHero album={album} />
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Apple,
@@ -37,24 +37,54 @@ const questions = [
   },
 ];
 
+function shuffleItems<T>(items: T[]) {
+  const shuffled = [...items];
+
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[swapIndex]] = [
+      shuffled[swapIndex],
+      shuffled[index],
+    ];
+  }
+
+  return shuffled;
+}
+
 export default function SignupPage() {
   const router = useRouter();
   const { signup, signupWithApple, signupWithGoogle, firebaseReady } = useAuth();
-  const [answers, setAnswers] = useState<Record<number, string>>({});
+  const [answers, setAnswers] = useState<Record<string, string>>({});
   const [verified, setVerified] = useState(false);
   const [gateError, setGateError] = useState("");
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [displayQuestions, setDisplayQuestions] = useState<typeof questions>(
+    [],
+  );
+
+  useEffect(() => {
+    const shuffleTimer = window.setTimeout(() => {
+      setDisplayQuestions(
+        shuffleItems(questions).map((question) => ({
+          ...question,
+          options: shuffleItems(question.options),
+        })),
+      );
+    }, 0);
+
+    return () => window.clearTimeout(shuffleTimer);
+  }, []);
 
   const allAnswered = useMemo(
-    () => questions.every((_, index) => Boolean(answers[index])),
+    () => questions.every((question) => Boolean(answers[question.question])),
     [answers],
   );
 
   function checkAnswers() {
     const passed = questions.every(
-      (question, index) => answers[index] === question.answer,
+      (question) => answers[question.question] === question.answer,
     );
 
     if (!passed) {
@@ -129,7 +159,7 @@ export default function SignupPage() {
 
         {!verified ? (
           <div className="space-y-6">
-            {questions.map((question, index) => (
+            {displayQuestions.map((question, index) => (
               <fieldset key={question.question}>
                 <legend className="text-lg font-semibold text-app-text">
                   {question.question}
@@ -144,11 +174,11 @@ export default function SignupPage() {
                         type="radio"
                         name={`question-${index}`}
                         value={option}
-                        checked={answers[index] === option}
+                        checked={answers[question.question] === option}
                         onChange={() =>
                           setAnswers((current) => ({
                             ...current,
-                            [index]: option,
+                            [question.question]: option,
                           }))
                         }
                         className="h-5 w-5 accent-app-accent"

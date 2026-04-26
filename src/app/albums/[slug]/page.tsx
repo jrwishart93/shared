@@ -53,7 +53,7 @@ export default async function AlbumPage({
 
   return (
     <ProtectedRoute>
-      <main className="min-h-[calc(100vh-73px)] bg-app-bg px-5 py-10 sm:px-8">
+      <main className="min-h-[calc(100vh-73px)] bg-app-bg px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
         <MotionSection className="liquid-panel mx-auto max-w-5xl overflow-hidden rounded-3xl">
           <Image
             src={imageSrc}
@@ -63,39 +63,41 @@ export default async function AlbumPage({
             priority
             className="h-72 w-full object-cover sm:h-[28rem]"
           />
-          <div className="p-6 sm:p-8">
+          <div className="p-5 sm:p-8">
             <Link
               href="/albums"
-              className="mb-6 inline-flex items-center gap-2 rounded-full border border-app-border px-4 py-2 text-sm font-semibold text-app-muted transition hover:bg-app-warm"
+              className="mb-6 inline-flex max-w-full items-center gap-2 rounded-full border border-app-border px-4 py-2 text-sm font-semibold text-app-muted transition hover:bg-app-warm"
             >
-              <ArrowLeft className="h-4 w-4" />
-              Back to all albums
+              <ArrowLeft className="h-4 w-4 flex-none" />
+              <span>Back to all albums</span>
             </Link>
             <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
               <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-app-warm-text">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-app-warm-text sm:text-sm sm:tracking-[0.18em]">
                   {album.year}
                 </p>
                 <h1 className="mt-2 text-4xl font-semibold text-app-text">
                   {album.title}
                 </h1>
-                <p className="mt-3 inline-flex items-center gap-2 text-app-muted">
-                  <MapPin className="h-5 w-5" />
-                  {album.location} · {album.date}
+                <p className="mt-3 inline-flex max-w-full items-start gap-2 text-app-muted">
+                  <MapPin className="mt-0.5 h-5 w-5 flex-none" />
+                  <span>
+                    {album.location} · {album.date}
+                  </span>
                 </p>
               </div>
               <a
                 href={album.icloudUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="liquid-button inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 font-semibold transition hover:-translate-y-0.5"
+                className="liquid-button inline-flex max-w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-center font-semibold transition hover:-translate-y-0.5 sm:px-6"
               >
-                <Camera className="h-5 w-5" />
-                Open full album in iCloud
-                <ExternalLink className="h-5 w-5" />
+                <Camera className="h-5 w-5 flex-none" />
+                <span>Open full album in iCloud</span>
+                <ExternalLink className="h-5 w-5 flex-none" />
               </a>
             </div>
-            <p className="mt-6 max-w-3xl text-lg leading-8 text-app-muted">
+            <p className="mt-6 max-w-3xl text-base leading-7 text-app-muted md:text-lg md:leading-8">
               {album.description}
             </p>
             <div className="mt-5 flex flex-wrap gap-2">

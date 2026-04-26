@@ -6,16 +6,16 @@ import { albums } from "@/lib/albums";
 export default function AlbumsPage() {
   return (
     <ProtectedRoute>
-      <main className="min-h-[calc(100vh-73px)] bg-app-bg px-5 py-10 sm:px-8">
+      <main className="min-h-[calc(100vh-73px)] bg-app-bg px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
         <MotionSection className="mx-auto max-w-7xl">
           <div className="mb-8 max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-app-warm-text">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-app-warm-text sm:text-sm sm:tracking-[0.18em]">
               Private albums
             </p>
             <h1 className="mt-2 text-4xl font-semibold text-app-text">
               Family albums
             </h1>
-            <p className="mt-3 text-lg leading-8 text-app-muted">
+            <p className="mt-3 text-base leading-7 text-app-muted md:text-lg md:leading-8">
               Holidays, trips away, birthdays, gatherings and family memories in
               one private place.
             </p>

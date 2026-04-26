@@ -59,37 +59,39 @@ export default function Home() {
   const featuredAlbum = albums.find((album) => album.featured) ?? albums[0];
 
   return (
-    <main className="min-h-screen bg-app-bg">
-      <section className="mx-auto grid w-full max-w-7xl gap-7 px-4 pb-10 pt-6 sm:gap-10 sm:px-8 sm:pb-14 sm:pt-10 lg:grid-cols-[1.02fr_0.98fr] lg:items-center lg:pb-20 lg:pt-16">
-        <MotionSection className="max-w-2xl">
-          <div className="liquid-glass mb-5 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-app-muted">
-            <Lock className="h-4 w-4" />
-            Private albums for family and close friends
+    <main className="min-h-screen overflow-hidden bg-app-bg">
+      <section className="mx-auto grid w-full max-w-7xl gap-7 px-4 pb-10 pt-6 sm:gap-10 sm:px-6 sm:pb-14 sm:pt-10 lg:grid-cols-[1.02fr_0.98fr] lg:items-center lg:px-8 lg:pb-20 lg:pt-16">
+        <MotionSection className="min-w-0 max-w-2xl">
+          <div className="liquid-glass mb-5 inline-flex max-w-full items-start gap-2 rounded-full px-3.5 py-2 text-sm font-medium leading-6 text-app-muted sm:items-center sm:px-4">
+            <Lock className="mt-0.5 h-4 w-4 flex-none sm:mt-0" />
+            <span className="min-w-0">
+              Private albums for family and close friends
+            </span>
           </div>
-          <h1 className="text-3xl font-semibold leading-tight text-app-text sm:text-5xl lg:text-6xl">
+          <h1 className="max-w-full text-4xl font-semibold leading-[1.08] text-app-text md:text-5xl lg:text-6xl">
             Family photos, stories and moments in one private place.
           </h1>
-          <p className="mt-5 text-base leading-7 text-app-muted sm:mt-6 sm:text-xl sm:leading-8">
+          <p className="mt-5 text-base leading-7 text-app-muted md:mt-6 md:text-xl md:leading-8">
             A quiet home for the photos we want to keep close: holidays,
             birthdays, trips away, family visits and the ordinary days that
             become favourites later.
           </p>
-          <p className="mt-4 text-sm leading-7 text-app-muted sm:text-lg">
+          <p className="mt-4 text-sm leading-7 text-app-muted md:text-lg">
             Full albums are kept private for family and close friends. Once
             signed in, you can browse albums, open shared photo collections and
             revisit the stories behind them.
           </p>
-          <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row">
+          <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap">
             <Link
               href="/login"
-              className="liquid-glass inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-base font-semibold text-app-text transition hover:-translate-y-0.5"
+              className="liquid-glass inline-flex max-w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-center text-base font-semibold text-app-text transition hover:-translate-y-0.5 sm:px-6"
             >
               <Camera className="h-5 w-5" />
               Sign in
             </Link>
             <Link
               href="/signup"
-              className="liquid-glass inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-base font-semibold text-app-text transition hover:-translate-y-0.5"
+              className="liquid-glass inline-flex max-w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-center text-base font-semibold text-app-text transition hover:-translate-y-0.5 sm:px-6"
             >
               <Sparkles className="h-5 w-5" />
               Request family access
@@ -106,10 +108,10 @@ export default function Home() {
         </MotionSection>
       </section>
 
-      <MotionSection className="liquid-glass mx-4 rounded-[1.75rem] px-5 py-7 sm:mx-8 sm:rounded-[2rem] sm:px-8 sm:py-10">
+      <MotionSection className="liquid-glass mx-4 rounded-[1.75rem] px-5 py-7 sm:mx-6 sm:rounded-[2rem] sm:px-8 sm:py-10 lg:mx-8">
         <div className="mx-auto flex max-w-7xl flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-app-warm-text">
+          <div className="min-w-0">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-app-warm-text sm:text-sm sm:tracking-[0.18em]">
               Latest shared album
             </p>
             <h2 className="mt-2 text-2xl font-semibold text-app-text">
@@ -121,7 +123,7 @@ export default function Home() {
           </div>
           <Link
             href="/albums"
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-app-text px-6 py-3 font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:opacity-90 dark:text-black"
+            className="inline-flex max-w-full items-center justify-center gap-2 rounded-full bg-app-text px-5 py-3 text-center font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:opacity-90 dark:text-black sm:px-6"
           >
             <Images className="h-5 w-5" />
             Browse family albums

@@ -46,8 +46,8 @@ export function HomeSlideshow({ slides }: HomeSlideshowProps) {
   }
 
   return (
-    <div className="liquid-panel overflow-hidden rounded-[1.75rem] p-2 sm:rounded-[2rem] sm:p-3">
-      <div className="relative h-[23rem] overflow-hidden rounded-[1.35rem] sm:h-[38rem] sm:rounded-[1.5rem] lg:h-[42rem]">
+    <div className="liquid-panel min-w-0 overflow-hidden rounded-[1.75rem] p-2 sm:rounded-[2rem] sm:p-3">
+      <div className="relative h-[21rem] overflow-hidden rounded-[1.35rem] md:h-[34rem] md:rounded-[1.5rem] lg:h-[42rem]">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeSlide.src}
@@ -71,8 +71,8 @@ export function HomeSlideshow({ slides }: HomeSlideshowProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-black/62 via-black/10 to-transparent" />
 
         <div className="absolute left-3 right-3 top-3 flex items-center justify-between gap-3 sm:left-4 sm:right-4 sm:top-4">
-          <div className="liquid-glass inline-flex items-center gap-2 rounded-full px-3 py-2 text-xs font-semibold text-white sm:text-sm">
-            <Images className="h-4 w-4" />
+          <div className="liquid-glass inline-flex max-w-[calc(100%-3.25rem)] items-center gap-2 rounded-full px-3 py-2 text-xs font-semibold text-white sm:text-sm">
+            <Images className="h-4 w-4 flex-none" />
             {activeIndex + 1} / {slides.length}
           </div>
           <button
@@ -89,11 +89,11 @@ export function HomeSlideshow({ slides }: HomeSlideshowProps) {
           </button>
         </div>
 
-        <div className="absolute inset-x-3 top-1/2 flex -translate-y-1/2 items-center justify-between sm:inset-x-4">
+        <div className="absolute inset-x-2 top-1/2 flex -translate-y-1/2 items-center justify-between sm:inset-x-4">
           <button
             type="button"
             onClick={previousSlide}
-            className="liquid-glass grid h-11 w-11 place-items-center rounded-full text-white transition hover:-translate-x-0.5 sm:h-12 sm:w-12"
+            className="liquid-glass grid h-10 w-10 place-items-center rounded-full text-white transition hover:-translate-x-0.5 sm:h-12 sm:w-12"
             aria-label="Previous image"
           >
             <ChevronLeft className="h-6 w-6" />
@@ -101,7 +101,7 @@ export function HomeSlideshow({ slides }: HomeSlideshowProps) {
           <button
             type="button"
             onClick={nextSlide}
-            className="liquid-glass grid h-11 w-11 place-items-center rounded-full text-white transition hover:translate-x-0.5 sm:h-12 sm:w-12"
+            className="liquid-glass grid h-10 w-10 place-items-center rounded-full text-white transition hover:translate-x-0.5 sm:h-12 sm:w-12"
             aria-label="Next image"
           >
             <ChevronRight className="h-6 w-6" />
@@ -109,11 +109,11 @@ export function HomeSlideshow({ slides }: HomeSlideshowProps) {
         </div>
 
         <div className="absolute inset-x-3 bottom-3 sm:inset-x-4 sm:bottom-4">
-          <div className="liquid-glass rounded-2xl p-3">
+          <div className="liquid-glass min-w-0 rounded-2xl p-3">
             <p className="text-xs font-medium text-white/82 sm:text-sm">
               Family preview
             </p>
-            <p className="mt-1 line-clamp-1 text-base font-semibold text-white sm:text-lg">
+            <p className="mt-1 line-clamp-2 text-sm font-semibold leading-5 text-white sm:text-lg">
               {activeSlide.alt}
             </p>
           </div>
