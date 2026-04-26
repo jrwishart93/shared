@@ -18,6 +18,10 @@ export const metadata: Metadata = {
   title: "Online Family Album",
   description:
     "A private family photo hub for albums, trips, holidays, gatherings and memories.",
+  icons: {
+    icon: "/images/albums/logo-image/family-adventures-logo.png",
+    apple: "/images/albums/logo-image/family-adventures-logo.png",
+  },
 };
 
 export default function RootLayout({

@@ -49,8 +49,26 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Firebase
 
-Enable Email/Password sign-in in Firebase Auth. Deploy the included Firestore
-rules so private album data is readable only by signed-in users:
+Enable Email/Password sign-in in Firebase Auth.
+
+For Google and Apple account access, also enable the matching Firebase Auth
+providers.
+
+Google provider/project reference:
+
+```text
+project-393028727131
+```
+
+Apple Sign in should use this Firebase callback URL in the Apple developer
+configuration:
+
+```text
+https://shared-e617d.firebaseapp.com/__/auth/handler
+```
+
+Deploy the included Firestore rules so private album data is readable only by
+signed-in users:
 
 ```bash
 firebase deploy --only firestore:rules

@@ -2,7 +2,14 @@
 
 import { FormEvent, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowRight, CheckCircle2, ShieldQuestion, UserPlus } from "lucide-react";
+import {
+  Apple,
+  ArrowRight,
+  CheckCircle2,
+  Globe2,
+  ShieldQuestion,
+  UserPlus,
+} from "lucide-react";
 import { MotionSection } from "@/components/MotionSection";
 import { useAuth } from "@/context/AuthContext";
 
@@ -32,7 +39,7 @@ const questions = [
 
 export default function SignupPage() {
   const router = useRouter();
-  const { signup, firebaseReady } = useAuth();
+  const { signup, signupWithApple, signupWithGoogle, firebaseReady } = useAuth();
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [verified, setVerified] = useState(false);
   const [gateError, setGateError] = useState("");
@@ -69,6 +76,27 @@ export default function SignupPage() {
       router.push("/albums");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to create account.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  async function handleSocialSignup(provider: "apple" | "google") {
+    setError("");
+    setSubmitting(true);
+
+    try {
+      if (provider === "apple") {
+        await signupWithApple();
+      } else {
+        await signupWithGoogle();
+      }
+
+      router.push("/albums");
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Unable to create account.",
+      );
     } finally {
       setSubmitting(false);
     }
@@ -143,63 +171,103 @@ export default function SignupPage() {
             </button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-6">
             {!firebaseReady ? (
               <div className="rounded-2xl bg-app-warm p-4 text-sm text-app-warm-text">
                 Firebase env vars are not configured yet.
               </div>
             ) : null}
-            <label className="block">
-              <span className="text-sm font-semibold text-app-muted">Name</span>
-              <input
-                value={form.name}
-                onChange={(event) =>
-                  setForm((current) => ({ ...current, name: event.target.value }))
-                }
-                required
-                className="mt-2 w-full rounded-2xl border border-app-border bg-app-card-strong px-4 py-3 outline-none transition focus:border-app-accent focus:ring-4 focus:ring-app-accent/15"
-              />
-            </label>
-            <label className="block">
-              <span className="text-sm font-semibold text-app-muted">Email</span>
-              <input
-                type="email"
-                value={form.email}
-                onChange={(event) =>
-                  setForm((current) => ({ ...current, email: event.target.value }))
-                }
-                required
-                className="mt-2 w-full rounded-2xl border border-app-border bg-app-card-strong px-4 py-3 outline-none transition focus:border-app-accent focus:ring-4 focus:ring-app-accent/15"
-              />
-            </label>
-            <label className="block">
-              <span className="text-sm font-semibold text-app-muted">
-                Password
-              </span>
-              <input
-                type="password"
-                value={form.password}
-                onChange={(event) =>
-                  setForm((current) => ({
-                    ...current,
-                    password: event.target.value,
-                  }))
-                }
-                minLength={6}
-                required
-                className="mt-2 w-full rounded-2xl border border-app-border bg-app-card-strong px-4 py-3 outline-none transition focus:border-app-accent focus:ring-4 focus:ring-app-accent/15"
-              />
-            </label>
-            {error ? <p className="text-sm text-red-700">{error}</p> : null}
-            <button
-              type="submit"
-              disabled={submitting || !firebaseReady}
-              className="liquid-button inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-3 font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              <UserPlus className="h-5 w-5" />
-              {submitting ? "Creating account..." : "Create account"}
-            </button>
-          </form>
+
+            <div className="grid gap-3 sm:grid-cols-2">
+              <button
+                type="button"
+                onClick={() => handleSocialSignup("google")}
+                disabled={submitting || !firebaseReady}
+                className="liquid-glass inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 font-semibold text-app-text transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                <Globe2 className="h-5 w-5" />
+                Continue with Google
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSocialSignup("apple")}
+                disabled={submitting || !firebaseReady}
+                className="liquid-glass inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 font-semibold text-app-text transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                <Apple className="h-5 w-5" />
+                Continue with Apple
+              </button>
+            </div>
+
+            <div className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-app-subtle">
+              <span className="h-px flex-1 bg-app-border" />
+              Or use email
+              <span className="h-px flex-1 bg-app-border" />
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <label className="block">
+                <span className="text-sm font-semibold text-app-muted">
+                  Name
+                </span>
+                <input
+                  value={form.name}
+                  onChange={(event) =>
+                    setForm((current) => ({
+                      ...current,
+                      name: event.target.value,
+                    }))
+                  }
+                  required
+                  className="mt-2 w-full rounded-2xl border border-app-border bg-app-card-strong px-4 py-3 outline-none transition focus:border-app-accent focus:ring-4 focus:ring-app-accent/15"
+                />
+              </label>
+              <label className="block">
+                <span className="text-sm font-semibold text-app-muted">
+                  Email
+                </span>
+                <input
+                  type="email"
+                  value={form.email}
+                  onChange={(event) =>
+                    setForm((current) => ({
+                      ...current,
+                      email: event.target.value,
+                    }))
+                  }
+                  required
+                  className="mt-2 w-full rounded-2xl border border-app-border bg-app-card-strong px-4 py-3 outline-none transition focus:border-app-accent focus:ring-4 focus:ring-app-accent/15"
+                />
+              </label>
+              <label className="block">
+                <span className="text-sm font-semibold text-app-muted">
+                  Password
+                </span>
+                <input
+                  type="password"
+                  value={form.password}
+                  onChange={(event) =>
+                    setForm((current) => ({
+                      ...current,
+                      password: event.target.value,
+                    }))
+                  }
+                  minLength={6}
+                  required
+                  className="mt-2 w-full rounded-2xl border border-app-border bg-app-card-strong px-4 py-3 outline-none transition focus:border-app-accent focus:ring-4 focus:ring-app-accent/15"
+                />
+              </label>
+              {error ? <p className="text-sm text-red-700">{error}</p> : null}
+              <button
+                type="submit"
+                disabled={submitting || !firebaseReady}
+                className="liquid-button inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-3 font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                <UserPlus className="h-5 w-5" />
+                {submitting ? "Creating account..." : "Create account"}
+              </button>
+            </form>
+          </div>
         )}
       </MotionSection>
     </main>

@@ -60,42 +60,44 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-app-bg">
-      <section className="mx-auto grid w-full max-w-7xl gap-10 px-5 pb-14 pt-10 sm:px-8 lg:grid-cols-[1.02fr_0.98fr] lg:items-center lg:pb-20 lg:pt-16">
+      <section className="mx-auto grid w-full max-w-7xl gap-7 px-4 pb-10 pt-6 sm:gap-10 sm:px-8 sm:pb-14 sm:pt-10 lg:grid-cols-[1.02fr_0.98fr] lg:items-center lg:pb-20 lg:pt-16">
         <MotionSection className="max-w-2xl">
           <div className="liquid-glass mb-5 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-app-muted">
             <Lock className="h-4 w-4" />
             Private albums for family and close friends
           </div>
-          <h1 className="text-4xl font-semibold leading-tight text-app-text sm:text-5xl lg:text-6xl">
-            A private place for our family photos.
+          <h1 className="text-3xl font-semibold leading-tight text-app-text sm:text-5xl lg:text-6xl">
+            Family photos, stories and moments in one private place.
           </h1>
-          <p className="mt-6 text-lg leading-8 text-app-muted sm:text-xl">
-            We wanted somewhere simple and personal to keep our family albums
-            together, away from adverts, feeds and social media noise.
+          <p className="mt-5 text-base leading-7 text-app-muted sm:mt-6 sm:text-xl sm:leading-8">
+            A quiet home for the photos we want to keep close: holidays,
+            birthdays, trips away, family visits and the ordinary days that
+            become favourites later.
           </p>
-          <p className="mt-4 text-base leading-7 text-app-muted sm:text-lg">
-            This is where we will collect photos from holidays, trips away,
-            birthdays, family gatherings and the everyday moments worth keeping.
+          <p className="mt-4 text-sm leading-7 text-app-muted sm:text-lg">
+            Full albums are kept private for family and close friends. Once
+            signed in, you can browse albums, open shared photo collections and
+            revisit the stories behind them.
           </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row">
             <Link
               href="/login"
-              className="liquid-button inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-base font-semibold transition hover:-translate-y-0.5"
+              className="liquid-glass inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-base font-semibold text-app-text transition hover:-translate-y-0.5"
             >
               <Camera className="h-5 w-5" />
-              Sign in to view albums
+              Sign in
             </Link>
             <Link
               href="/signup"
               className="liquid-glass inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-base font-semibold text-app-text transition hover:-translate-y-0.5"
             >
               <Sparkles className="h-5 w-5" />
-              Create family account
+              Request family access
             </Link>
           </div>
           <p className="mt-5 text-sm leading-6 text-app-subtle">
-            Some preview photos are shown here, but the full albums are
-            available to family and close friends after signing in.
+            Preview moments are shown here. The full albums stay behind the
+            family sign-in.
           </p>
         </MotionSection>
 
@@ -104,11 +106,11 @@ export default function Home() {
         </MotionSection>
       </section>
 
-      <MotionSection className="liquid-glass mx-5 rounded-[2rem] px-5 py-10 sm:mx-8 sm:px-8">
+      <MotionSection className="liquid-glass mx-4 rounded-[1.75rem] px-5 py-7 sm:mx-8 sm:rounded-[2rem] sm:px-8 sm:py-10">
         <div className="mx-auto flex max-w-7xl flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-app-warm-text">
-              Featured first album
+              Latest shared album
             </p>
             <h2 className="mt-2 text-2xl font-semibold text-app-text">
               {featuredAlbum.title}
@@ -122,7 +124,7 @@ export default function Home() {
             className="inline-flex items-center justify-center gap-2 rounded-full bg-app-text px-6 py-3 font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:opacity-90 dark:text-black"
           >
             <Images className="h-5 w-5" />
-            View private albums
+            Browse family albums
           </Link>
         </div>
       </MotionSection>

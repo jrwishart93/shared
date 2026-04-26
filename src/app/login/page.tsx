@@ -3,14 +3,14 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, Suspense, useState } from "react";
-import { LogIn } from "lucide-react";
+import { Apple, Globe2, LogIn } from "lucide-react";
 import { MotionSection } from "@/components/MotionSection";
 import { useAuth } from "@/context/AuthContext";
 
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { login, firebaseReady } = useAuth();
+  const { login, loginWithApple, loginWithGoogle, firebaseReady } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -23,6 +23,25 @@ function LoginForm() {
 
     try {
       await login(email, password);
+      router.push(searchParams.get("next") ?? "/albums");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unable to sign in.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  async function handleSocialLogin(provider: "apple" | "google") {
+    setError("");
+    setSubmitting(true);
+
+    try {
+      if (provider === "apple") {
+        await loginWithApple();
+      } else {
+        await loginWithGoogle();
+      }
+
       router.push(searchParams.get("next") ?? "/albums");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to sign in.");
@@ -49,6 +68,33 @@ function LoginForm() {
             Firebase env vars are not configured yet.
           </div>
         ) : null}
+
+        <div className="grid gap-3 sm:grid-cols-2">
+          <button
+            type="button"
+            onClick={() => handleSocialLogin("google")}
+            disabled={submitting || !firebaseReady}
+            className="liquid-glass inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 font-semibold text-app-text transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            <Globe2 className="h-5 w-5" />
+            Google
+          </button>
+          <button
+            type="button"
+            onClick={() => handleSocialLogin("apple")}
+            disabled={submitting || !firebaseReady}
+            className="liquid-glass inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 font-semibold text-app-text transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            <Apple className="h-5 w-5" />
+            Apple
+          </button>
+        </div>
+
+        <div className="my-5 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-app-subtle">
+          <span className="h-px flex-1 bg-app-border" />
+          Or use email
+          <span className="h-px flex-1 bg-app-border" />
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <label className="block">

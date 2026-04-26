@@ -10,8 +10,11 @@ import {
 } from "react";
 import {
   createUserWithEmailAndPassword,
+  GoogleAuthProvider,
   onAuthStateChanged,
+  OAuthProvider,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
   updateProfile,
   type User,
@@ -33,6 +36,10 @@ type AuthContextValue = {
   firebaseReady: boolean;
   login: (email: string, password: string) => Promise<void>;
   signup: (name: string, email: string, password: string) => Promise<void>;
+  loginWithGoogle: () => Promise<void>;
+  loginWithApple: () => Promise<void>;
+  signupWithGoogle: () => Promise<void>;
+  signupWithApple: () => Promise<void>;
   logout: () => Promise<void>;
 };
 
@@ -46,6 +53,27 @@ function requireFirebase() {
   }
 
   return { auth, db };
+}
+
+function getNameFromUser(user: User) {
+  return user.displayName ?? user.email?.split("@")[0] ?? "Family member";
+}
+
+async function writeMemberProfile(user: User, name = getNameFromUser(user)) {
+  const firebase = requireFirebase();
+  const profile: UserProfile = {
+    name,
+    email: user.email ?? "",
+    approved: true,
+    role: "member",
+  };
+
+  await setDoc(doc(firebase.db, "users", user.uid), {
+    ...profile,
+    createdAt: serverTimestamp(),
+  });
+
+  return profile;
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -97,13 +125,64 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         );
 
         await updateProfile(credential.user, { displayName: name });
-        await setDoc(doc(firebase.db, "users", credential.user.uid), {
-          name,
-          email,
-          createdAt: serverTimestamp(),
-          approved: true,
-          role: "member",
-        });
+        const profile = await writeMemberProfile(credential.user, name);
+        setUserProfile(profile);
+      },
+      async loginWithGoogle() {
+        const firebase = requireFirebase();
+        const provider = new GoogleAuthProvider();
+        provider.addScope("email");
+        provider.addScope("profile");
+        const credential = await signInWithPopup(firebase.auth, provider);
+        const profileSnap = await getDoc(
+          doc(firebase.db, "users", credential.user.uid),
+        );
+
+        if (!profileSnap.exists()) {
+          await signOut(firebase.auth);
+          throw new Error(
+            "Please create a family account first by answering the family questions.",
+          );
+        }
+
+        setUserProfile(profileSnap.data() as UserProfile);
+      },
+      async loginWithApple() {
+        const firebase = requireFirebase();
+        const provider = new OAuthProvider("apple.com");
+        provider.addScope("email");
+        provider.addScope("name");
+        const credential = await signInWithPopup(firebase.auth, provider);
+        const profileSnap = await getDoc(
+          doc(firebase.db, "users", credential.user.uid),
+        );
+
+        if (!profileSnap.exists()) {
+          await signOut(firebase.auth);
+          throw new Error(
+            "Please create a family account first by answering the family questions.",
+          );
+        }
+
+        setUserProfile(profileSnap.data() as UserProfile);
+      },
+      async signupWithGoogle() {
+        const firebase = requireFirebase();
+        const provider = new GoogleAuthProvider();
+        provider.addScope("email");
+        provider.addScope("profile");
+        const credential = await signInWithPopup(firebase.auth, provider);
+        const profile = await writeMemberProfile(credential.user);
+        setUserProfile(profile);
+      },
+      async signupWithApple() {
+        const firebase = requireFirebase();
+        const provider = new OAuthProvider("apple.com");
+        provider.addScope("email");
+        provider.addScope("name");
+        const credential = await signInWithPopup(firebase.auth, provider);
+        const profile = await writeMemberProfile(credential.user);
+        setUserProfile(profile);
       },
       async logout() {
         const firebase = requireFirebase();

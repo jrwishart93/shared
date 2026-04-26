@@ -68,6 +68,12 @@ body {
   min-height: 100vh;
 }
 
+@media (max-width: 639px) {
+  body {
+    padding-bottom: calc(env(safe-area-inset-bottom) + 6.5rem);
+  }
+}
+
 body::before {
   content: "";
   position: fixed;
@@ -126,5 +132,25 @@ input {
 @media (prefers-color-scheme: dark) {
   .liquid-button {
     color: #061110;
+  }
+}
+
+@keyframes logo-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(-4px) rotate(1deg);
+  }
+}
+
+.animated-logo {
+  animation: logo-float 5.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animated-logo {
+    animation: none;
   }
 }
