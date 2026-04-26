@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Online Family Album
 
-## Getting Started
+A private Next.js family photo website for Jamie and Tin to share family albums
+with family and close friends.
 
-First, run the development server:
+## Stack
+
+- Next.js App Router
+- TypeScript
+- Tailwind CSS
+- Firebase Auth
+- Firestore
+- Framer Motion
+- Lucide React
+
+## Local Setup
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Copy the Firebase env template and add the public Firebase web app config:
+
+```bash
+cp .env.example .env.local
+```
+
+Required values:
+
+```bash
+NEXT_PUBLIC_FIREBASE_API_KEY=
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=shared-e617d.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=shared-e617d
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=shared-e617d.firebasestorage.app
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+NEXT_PUBLIC_FIREBASE_APP_ID=
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=
+```
+
+Run the app:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Firebase
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Enable Email/Password sign-in in Firebase Auth. Deploy the included Firestore
+rules so private album data is readable only by signed-in users:
 
-## Learn More
+```bash
+firebase deploy --only firestore:rules
+```
 
-To learn more about Next.js, take a look at the following resources:
+The first version stores album metadata in `src/lib/albums.ts`; the structure
+matches the intended Firestore `albums` collection so it can move there later.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Version One
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Public homepage with warm intro and preview images
+- Family question gate before account creation
+- Firebase email/password signup and login
+- Firestore user profile creation
+- Protected albums, album detail, profile, and future admin routes
+- iCloud Shared Album links
+- Mobile-first responsive design
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The app is ready for Vercel as a standard Next.js project. Add the same
+`NEXT_PUBLIC_FIREBASE_*` values to the Vercel project environment variables
+before deploying.
