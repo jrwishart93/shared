@@ -227,12 +227,12 @@ export function CommentsSection({ albumSlug }: { albumSlug: string }) {
 
   async function deleteComment(id: string) {
     if (!db) return;
-    await deleteDoc(doc(db, "comments", id));
-    // Also delete any replies to this comment
+    const activeDb = db;
+    await deleteDoc(doc(activeDb, "comments", id));
     const childIds = comments
       .filter((c) => c.parentId === id)
       .map((c) => c.id);
-    await Promise.all(childIds.map((cid) => deleteDoc(doc(db, "comments", cid))));
+    await Promise.all(childIds.map((cid) => deleteDoc(doc(activeDb, "comments", cid))));
   }
 
   async function submitNewComment() {
