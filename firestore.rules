@@ -6,6 +6,11 @@ service cloud.firestore {
       return request.auth != null;
     }
 
+    function isAdmin() {
+      return signedIn() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+
     match /users/{userId} {
       allow create: if signedIn() && request.auth.uid == userId;
       allow read, update: if signedIn() && request.auth.uid == userId;
@@ -14,6 +19,23 @@ service cloud.firestore {
     match /albums/{albumId} {
       allow read: if signedIn();
       allow write: if false;
+    }
+
+    match /comments/{commentId} {
+      allow read: if signedIn();
+      allow create: if signedIn()
+        && request.resource.data.authorId == request.auth.uid
+        && request.resource.data.text is string
+        && request.resource.data.text.size() > 0
+        && request.resource.data.text.size() <= 2000;
+      allow delete: if signedIn() && (
+        resource.data.authorId == request.auth.uid || isAdmin()
+      );
+    }
+
+    match /albumEdits/{albumSlug} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
     }
   }
 }
