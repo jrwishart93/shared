@@ -6,52 +6,104 @@ import { albums } from "@/lib/albums";
 
 const previewImages: HomeSlide[] = [
   {
-    src: "/images/albums/home-page-images/jamie-and-his-girls.jpeg",
-    alt: "Jamie with the girls",
+    src: "/images/albums/home-page-images/01-w-loung-sunset-seat.jpeg",
+    alt: "Family relaxing at sunset",
   },
   {
-    src: "/images/albums/home-page-images/dunedin-meets-callie.jpeg",
-    alt: "Dunedin meeting Callie",
+    src: "/images/albums/home-page-images/02-family walks.jpeg",
+    alt: "Family walk together",
   },
   {
-    src: "/images/albums/home-page-images/jamie-tin-dunedin-banff.jpeg",
+    src: "/images/albums/home-page-images/04-jamie-tin-dunedin-banff.jpeg",
     alt: "Jamie, Tin and Dunedin in Banff",
   },
   {
-    src: "/images/albums/home-page-images/Dunedin-Edi-castle-sunset.jpeg",
-    alt: "Dunedin at Edinburgh Castle at sunset",
-  },
-  {
-    src: "/images/albums/home-page-images/calgary-park-picnic.jpeg",
-    alt: "Family picnic in Calgary",
-  },
-  {
-    src: "/images/albums/home-page-images/dunedin-banff-national-park.jpeg",
-    alt: "Dunedin in Banff National Park",
-  },
-  {
-    src: "/images/albums/home-page-images/dunedin-on-shoulders-canada.jpeg",
-    alt: "Dunedin on shoulders in Canada",
-  },
-  {
-    src: "/images/albums/home-page-images/family-at-zoo.jpeg",
-    alt: "Family day at the zoo",
-  },
-  {
-    src: "/images/albums/home-page-images/family-christmas-2025.jpeg",
+    src: "/images/albums/home-page-images/05-family-christmas-2025.jpeg",
     alt: "Family Christmas 2025",
   },
   {
-    src: "/images/albums/home-page-images/jamie-dunedin-sunset.jpeg",
-    alt: "Jamie and Dunedin at sunset",
+    src: "/images/albums/home-page-images/06-jamie-and-his-girls.jpeg",
+    alt: "Jamie with the girls",
   },
   {
-    src: "/images/albums/home-page-images/snow-fam-pentlands-belerno.jpeg",
+    src: "/images/albums/home-page-images/07-snow-tin-dunedin.jpeg",
+    alt: "Tin and Dunedin in the snow",
+  },
+  {
+    src: "/images/albums/home-page-images/08-jamie-tin-dunedin-westlothian.jpeg",
+    alt: "Jamie, Tin and Dunedin in West Lothian",
+  },
+  {
+    src: "/images/albums/home-page-images/09-selfie-snow.jpeg",
+    alt: "Family selfie in the snow",
+  },
+  {
+    src: "/images/albums/home-page-images/10-Dunedin-Edi-castle-sunset.jpeg",
+    alt: "Dunedin at Edinburgh Castle at sunset",
+  },
+  {
+    src: "/images/albums/home-page-images/11-family-at-zoo.jpeg",
+    alt: "Family day at the zoo",
+  },
+  {
+    src: "/images/albums/home-page-images/12-edinburgh-royal-mile.jpeg",
+    alt: "Family time on the Royal Mile",
+  },
+  {
+    src: "/images/albums/home-page-images/13-calgary-park-picnic.jpeg",
+    alt: "Family picnic in Calgary",
+  },
+  {
+    src: "/images/albums/home-page-images/14-Dunedin-johnny-walker.jpeg",
+    alt: "Dunedin out for the day",
+  },
+  {
+    src: "/images/albums/home-page-images/15-dunedin-banff-national-park.jpeg",
+    alt: "Dunedin in Banff National Park",
+  },
+  {
+    src: "/images/albums/home-page-images/16-snow-fam-pentlands-belerno.jpeg",
     alt: "Family snow day in the Pentlands",
   },
   {
-    src: "/images/albums/home-page-images/snow-tin-dunedin.jpeg",
-    alt: "Tin and Dunedin in the snow",
+    src: "/images/albums/home-page-images/17-highland-cow.jpeg",
+    alt: "Highland cow on a family outing",
+  },
+  {
+    src: "/images/albums/home-page-images/18-dunedin-on-shoulders-canada.jpeg",
+    alt: "Dunedin on shoulders in Canada",
+  },
+  {
+    src: "/images/albums/home-page-images/19-dunedin-meets-callie.jpeg",
+    alt: "Dunedin meeting Callie",
+  },
+  {
+    src: "/images/albums/home-page-images/20-dunedin-snow.jpeg",
+    alt: "Dunedin playing in the snow",
+  },
+  {
+    src: "/images/albums/home-page-images/21-dunedin-tin-south-queensferry.jpeg",
+    alt: "Tin and Dunedin in South Queensferry",
+  },
+  {
+    src: "/images/albums/home-page-images/22-bear-dunedin-jayme.jpeg",
+    alt: "Dunedin and Jayme with a teddy bear",
+  },
+  {
+    src: "/images/albums/home-page-images/23-canadian-fam-house.jpeg",
+    alt: "Family time at the house in Canada",
+  },
+  {
+    src: "/images/albums/home-page-images/24-jamie-dunedin-sunset.jpeg",
+    alt: "Jamie and Dunedin at sunset",
+  },
+  {
+    src: "/images/albums/home-page-images/25-golf-buggy-tin-dunedin.jpeg",
+    alt: "Tin and Dunedin on a golf buggy",
+  },
+  {
+    src: "/images/albums/home-page-images/26-w-lounge-sunset.jpeg",
+    alt: "Evening family moment at sunset",
   },
 ];
 
