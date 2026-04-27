@@ -82,11 +82,11 @@ export const albums: Album[] = [
   {
     title: "Dunedin’s 1st Birthday",
     slug: "dunedins-1st-birthday",
-    year: "2026",
-    date: "2026",
+    year: "2025",
+    date: "April 2025",
     location: "Family celebration",
     description:
-      "A special shared collection celebrating Dunedin’s first birthday with family.",
+      "Dunedin’s first birthday was really special, with a soft Easter theme, magical lights woven through the trees, and little bunny baskets dotted around the garden. In the lead-up, Jamie scattered grass seed over what turned out to be quite a mossy lawn, leaving a few darker patches throughout the garden (thankfully Dunedin didn’t complain). She was joined by little friends from playgroup and family, and the whole day felt simple, relaxed, and full of good people. It’s a birthday she won’t remember herself, but one we’ll always hold onto and share with her as she grows. We ended the night the best way, all cosied up around the fire pit together.",
     coverImage: "/images/albums/home-page-images/Dunedins_1st_birthday.JPG",
     icloudUrl: "https://www.icloud.com/sharedalbum/#B2V5BydzF9comu",
     visibility: "private",
