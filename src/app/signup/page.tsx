@@ -12,30 +12,7 @@ import {
 } from "lucide-react";
 import { MotionSection } from "@/components/MotionSection";
 import { useAuth } from "@/context/AuthContext";
-
-const questions = [
-  {
-    question: "Where did Jamie & Tin get married?",
-    options: ["Barbados", "Antarctica", "Italy", "New Zealand", "Mongolia"],
-    answer: "New Zealand",
-  },
-  {
-    question: "Where did Tin grow up?",
-    options: [
-      "On a farm near Wyrallah",
-      "In a high rise city apartment in Japan",
-      "On a remote jungle island off the coast of Papua New Guinea",
-      "Deep in the Amazon rainforest",
-      "Hollywood Hills near Los Angeles",
-    ],
-    answer: "On a farm near Wyrallah",
-  },
-  {
-    question: "How many children do Tin & Jamie have?",
-    options: ["6", "4", "2", "None"],
-    answer: "2",
-  },
-];
+import { familyQuestions } from "@/lib/familyQuestions";
 
 function shuffleItems<T>(items: T[]) {
   const shuffled = [...items];
@@ -60,14 +37,16 @@ export default function SignupPage() {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [displayQuestions, setDisplayQuestions] = useState<typeof questions>(
+  const [displayQuestions, setDisplayQuestions] = useState<
+    typeof familyQuestions
+  >(
     [],
   );
 
   useEffect(() => {
     const shuffleTimer = window.setTimeout(() => {
       setDisplayQuestions(
-        shuffleItems(questions).map((question) => ({
+        shuffleItems(familyQuestions).map((question) => ({
           ...question,
           options: shuffleItems(question.options),
         })),
@@ -77,23 +56,66 @@ export default function SignupPage() {
     return () => window.clearTimeout(shuffleTimer);
   }, []);
 
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadVerificationState() {
+      try {
+        const response = await fetch("/api/family-verification", {
+          method: "GET",
+          credentials: "same-origin",
+        });
+        const result = (await response.json()) as { verified?: boolean };
+
+        if (isMounted && result.verified) {
+          setVerified(true);
+        }
+      } catch {
+        // Ignore status preload errors and let the explicit submit flow handle it.
+      }
+    }
+
+    void loadVerificationState();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const allAnswered = useMemo(
-    () => questions.every((question) => Boolean(answers[question.question])),
+    () =>
+      familyQuestions.every((question) => Boolean(answers[question.question])),
     [answers],
   );
 
-  function checkAnswers() {
-    const passed = questions.every(
-      (question) => answers[question.question] === question.answer,
-    );
-
-    if (!passed) {
-      setGateError("One or more answers did not match. Please try again.");
-      return;
-    }
-
+  async function checkAnswers() {
     setGateError("");
-    setVerified(true);
+    setSubmitting(true);
+
+    try {
+      const response = await fetch("/api/family-verification", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ answers }),
+      });
+      const result = (await response.json()) as {
+        error?: string;
+        verified?: boolean;
+      };
+
+      if (!response.ok || !result.verified) {
+        setGateError(result.error ?? "Unable to verify your answers.");
+        return;
+      }
+
+      setVerified(true);
+    } catch {
+      setGateError("Unable to verify your answers right now.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -151,9 +173,8 @@ export default function SignupPage() {
             before account creation.
           </p>
           <p className="mt-3 rounded-2xl bg-app-warm p-4 text-sm leading-6 text-app-warm-text">
-            Security note: these answers are checked in the browser for version
-            one. A later version should move this check to a server action or
-            API route.
+            Security note: these answers are checked through a server route so
+            the correct answers are not exposed in the page code.
           </p>
         </div>
 
@@ -193,11 +214,11 @@ export default function SignupPage() {
             <button
               type="button"
               onClick={checkAnswers}
-              disabled={!allAnswered}
+              disabled={!allAnswered || submitting}
               className="liquid-button inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-3 font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
             >
               <ArrowRight className="h-5 w-5" />
-              Continue to account creation
+              {submitting ? "Checking answers..." : "Continue to account creation"}
             </button>
           </div>
         ) : (

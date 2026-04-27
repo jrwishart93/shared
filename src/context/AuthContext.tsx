@@ -44,6 +44,12 @@ type AuthContextValue = {
 };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
+const authorizedDomainHints = [
+  "localhost",
+  "shared-xi-seven.vercel.app",
+  "shared-james-projects-bf21025b.vercel.app",
+  "shared-jrwishart93-james-projects-bf21025b.vercel.app",
+];
 
 function requireFirebase() {
   if (!auth || !db) {
@@ -74,6 +80,65 @@ async function writeMemberProfile(user: User, name = getNameFromUser(user)) {
   });
 
   return profile;
+}
+
+async function requireServerVerification() {
+  const response = await fetch("/api/family-verification", {
+    method: "GET",
+    credentials: "same-origin",
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to verify family access right now.");
+  }
+
+  const result = (await response.json()) as { verified?: boolean };
+
+  if (!result.verified) {
+    throw new Error(
+      "Please answer the family questions before creating an account.",
+    );
+  }
+}
+
+async function clearServerVerification() {
+  await fetch("/api/family-verification", {
+    method: "DELETE",
+    credentials: "same-origin",
+  });
+}
+
+function mapAuthError(error: unknown) {
+  if (
+    error &&
+    typeof error === "object" &&
+    "code" in error &&
+    typeof error.code === "string"
+  ) {
+    if (error.code === "auth/unauthorized-domain") {
+      return new Error(
+        `This site domain is not yet authorised in Firebase Auth. Add these domains in Firebase Console -> Authentication -> Settings -> Authorised domains: ${authorizedDomainHints.join(", ")}.`,
+      );
+    }
+
+    if (error.code === "auth/popup-blocked") {
+      return new Error(
+        "The sign-in popup was blocked by the browser. Allow popups for this site and try again.",
+      );
+    }
+
+    if (error.code === "auth/popup-closed-by-user") {
+      return new Error("The sign-in popup was closed before completion.");
+    }
+
+    if (error.code === "auth/operation-not-allowed") {
+      return new Error(
+        "This sign-in provider is not enabled in Firebase Authentication.",
+      );
+    }
+  }
+
+  return error instanceof Error ? error : new Error("Authentication failed.");
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -114,75 +179,105 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       firebaseReady: isFirebaseConfigured,
       async login(email, password) {
         const firebase = requireFirebase();
-        await signInWithEmailAndPassword(firebase.auth, email, password);
+        try {
+          await signInWithEmailAndPassword(firebase.auth, email, password);
+        } catch (error) {
+          throw mapAuthError(error);
+        }
       },
       async signup(name, email, password) {
         const firebase = requireFirebase();
-        const credential = await createUserWithEmailAndPassword(
-          firebase.auth,
-          email,
-          password,
-        );
+        try {
+          await requireServerVerification();
+          const credential = await createUserWithEmailAndPassword(
+            firebase.auth,
+            email,
+            password,
+          );
 
-        await updateProfile(credential.user, { displayName: name });
-        const profile = await writeMemberProfile(credential.user, name);
-        setUserProfile(profile);
+          await updateProfile(credential.user, { displayName: name });
+          const profile = await writeMemberProfile(credential.user, name);
+          setUserProfile(profile);
+          await clearServerVerification();
+        } catch (error) {
+          throw mapAuthError(error);
+        }
       },
       async loginWithGoogle() {
         const firebase = requireFirebase();
-        const provider = new GoogleAuthProvider();
-        provider.addScope("email");
-        provider.addScope("profile");
-        const credential = await signInWithPopup(firebase.auth, provider);
-        const profileSnap = await getDoc(
-          doc(firebase.db, "users", credential.user.uid),
-        );
-
-        if (!profileSnap.exists()) {
-          await signOut(firebase.auth);
-          throw new Error(
-            "Please create a family account first by answering the family questions.",
+        try {
+          const provider = new GoogleAuthProvider();
+          provider.addScope("email");
+          provider.addScope("profile");
+          const credential = await signInWithPopup(firebase.auth, provider);
+          const profileSnap = await getDoc(
+            doc(firebase.db, "users", credential.user.uid),
           );
-        }
 
-        setUserProfile(profileSnap.data() as UserProfile);
+          if (!profileSnap.exists()) {
+            await signOut(firebase.auth);
+            throw new Error(
+              "Please create a family account first by answering the family questions.",
+            );
+          }
+
+          setUserProfile(profileSnap.data() as UserProfile);
+        } catch (error) {
+          throw mapAuthError(error);
+        }
       },
       async loginWithApple() {
         const firebase = requireFirebase();
-        const provider = new OAuthProvider("apple.com");
-        provider.addScope("email");
-        provider.addScope("name");
-        const credential = await signInWithPopup(firebase.auth, provider);
-        const profileSnap = await getDoc(
-          doc(firebase.db, "users", credential.user.uid),
-        );
-
-        if (!profileSnap.exists()) {
-          await signOut(firebase.auth);
-          throw new Error(
-            "Please create a family account first by answering the family questions.",
+        try {
+          const provider = new OAuthProvider("apple.com");
+          provider.addScope("email");
+          provider.addScope("name");
+          const credential = await signInWithPopup(firebase.auth, provider);
+          const profileSnap = await getDoc(
+            doc(firebase.db, "users", credential.user.uid),
           );
-        }
 
-        setUserProfile(profileSnap.data() as UserProfile);
+          if (!profileSnap.exists()) {
+            await signOut(firebase.auth);
+            throw new Error(
+              "Please create a family account first by answering the family questions.",
+            );
+          }
+
+          setUserProfile(profileSnap.data() as UserProfile);
+        } catch (error) {
+          throw mapAuthError(error);
+        }
       },
       async signupWithGoogle() {
         const firebase = requireFirebase();
-        const provider = new GoogleAuthProvider();
-        provider.addScope("email");
-        provider.addScope("profile");
-        const credential = await signInWithPopup(firebase.auth, provider);
-        const profile = await writeMemberProfile(credential.user);
-        setUserProfile(profile);
+        try {
+          await requireServerVerification();
+          const provider = new GoogleAuthProvider();
+          provider.addScope("email");
+          provider.addScope("profile");
+          const credential = await signInWithPopup(firebase.auth, provider);
+          const profile = await writeMemberProfile(credential.user);
+          setUserProfile(profile);
+          await clearServerVerification();
+        } catch (error) {
+          throw mapAuthError(error);
+        }
       },
       async signupWithApple() {
         const firebase = requireFirebase();
-        const provider = new OAuthProvider("apple.com");
-        provider.addScope("email");
-        provider.addScope("name");
-        const credential = await signInWithPopup(firebase.auth, provider);
-        const profile = await writeMemberProfile(credential.user);
-        setUserProfile(profile);
+        try {
+          await requireServerVerification();
+          const provider = new OAuthProvider("apple.com");
+          provider.addScope("email");
+          provider.addScope("name");
+          const credential = await signInWithPopup(firebase.auth, provider);
+          const profile = await writeMemberProfile(credential.user);
+          setUserProfile(profile);
+          await clearServerVerification();
+        } catch (error) {
+          throw mapAuthError(error);
+        }
       },
       async logout() {
         const firebase = requireFirebase();
