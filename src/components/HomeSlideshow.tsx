@@ -47,7 +47,7 @@ export function HomeSlideshow({ slides }: HomeSlideshowProps) {
 
   return (
     <div className="liquid-panel min-w-0 overflow-hidden rounded-[1.75rem] p-2 sm:rounded-[2rem] sm:p-3">
-      <div className="relative h-[21rem] overflow-hidden rounded-[1.35rem] md:h-[34rem] md:rounded-[1.5rem] lg:h-[42rem]">
+      <div className="relative h-[17.5rem] overflow-hidden rounded-[1.35rem] sm:h-[21rem] md:h-[34rem] md:rounded-[1.5rem] lg:h-[42rem]">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeSlide.src}
@@ -113,14 +113,14 @@ export function HomeSlideshow({ slides }: HomeSlideshowProps) {
             <p className="text-xs font-medium text-white/82 sm:text-sm">
               Family preview
             </p>
-            <p className="mt-1 line-clamp-2 text-sm font-semibold leading-5 text-white sm:text-lg">
+            <p className="mt-1 line-clamp-2 text-[0.92rem] font-semibold leading-5 text-white sm:text-lg">
               {activeSlide.alt}
             </p>
           </div>
         </div>
       </div>
 
-      <div className="mt-3 flex gap-2 overflow-x-auto pb-1 sm:grid sm:grid-cols-10 sm:overflow-visible sm:pb-0">
+      <div className="mt-2.5 flex gap-2 overflow-x-auto pb-1 sm:grid sm:grid-cols-10 sm:overflow-visible sm:pb-0">
         {visibleThumbs.map((slide, index) => (
           <button
             key={slide.src}
@@ -129,7 +129,7 @@ export function HomeSlideshow({ slides }: HomeSlideshowProps) {
               setActiveIndex(index);
               setIsPlaying(false);
             }}
-            className={`relative h-14 w-16 flex-none overflow-hidden rounded-2xl border transition sm:h-20 sm:w-auto ${
+            className={`relative h-12 w-14 flex-none overflow-hidden rounded-2xl border transition sm:h-20 sm:w-auto ${
               activeIndex === index
                 ? "border-app-accent opacity-100 ring-2 ring-app-accent/30"
                 : "border-app-border opacity-72 hover:opacity-100"

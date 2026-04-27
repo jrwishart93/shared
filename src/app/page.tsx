@@ -60,38 +60,38 @@ export default function Home() {
 
   return (
     <main className="min-h-screen overflow-hidden bg-app-bg">
-      <section className="mx-auto grid w-full max-w-7xl gap-7 px-4 pb-10 pt-6 sm:gap-10 sm:px-6 sm:pb-14 sm:pt-10 lg:grid-cols-[1.02fr_0.98fr] lg:items-center lg:px-8 lg:pb-20 lg:pt-16">
-        <MotionSection className="min-w-0 max-w-2xl">
-          <div className="liquid-glass mb-5 inline-flex max-w-full items-start gap-2 rounded-full px-3.5 py-2 text-sm font-medium leading-6 text-app-muted sm:items-center sm:px-4">
+      <section className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-5 overflow-hidden px-4 pb-8 pt-4 sm:gap-10 sm:px-6 sm:pb-14 sm:pt-10 lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)] lg:items-center lg:px-8 lg:pb-20 lg:pt-16">
+        <MotionSection className="min-w-0 w-full max-w-2xl">
+          <div className="liquid-glass mb-4 inline-flex max-w-full items-start gap-2 rounded-full px-3 py-1.5 text-[0.8rem] font-medium leading-5 text-app-muted sm:mb-5 sm:px-4 sm:py-2 sm:text-sm sm:leading-6 sm:items-center">
             <Lock className="mt-0.5 h-4 w-4 flex-none sm:mt-0" />
             <span className="min-w-0">
               Private albums for family and close friends
             </span>
           </div>
-          <h1 className="max-w-full text-4xl font-semibold leading-[1.08] text-app-text md:text-5xl lg:text-6xl">
+          <h1 className="max-w-full break-words text-[2.25rem] font-semibold leading-[1.02] text-app-text sm:text-4xl md:text-5xl lg:text-6xl">
             Family photos, stories and moments in one private place.
           </h1>
-          <p className="mt-5 text-base leading-7 text-app-muted md:mt-6 md:text-xl md:leading-8">
+          <p className="mt-4 max-w-full text-[0.96rem] leading-7 text-app-muted md:mt-6 md:text-xl md:leading-8">
             A quiet home for the photos we want to keep close: holidays,
             birthdays, trips away, family visits and the ordinary days that
             become favourites later.
           </p>
-          <p className="mt-4 text-sm leading-7 text-app-muted md:text-lg">
+          <p className="mt-3 max-w-full text-sm leading-6 text-app-muted md:mt-4 md:text-lg md:leading-7">
             Full albums are kept private for family and close friends. Once
             signed in, you can browse albums, open shared photo collections and
             revisit the stories behind them.
           </p>
-          <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap">
+          <div className="mt-5 grid grid-cols-2 gap-3 sm:mt-8 sm:flex sm:flex-row sm:flex-wrap">
             <Link
               href="/login"
-              className="liquid-glass inline-flex max-w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-center text-base font-semibold text-app-text transition hover:-translate-y-0.5 sm:px-6"
+              className="liquid-glass inline-flex max-w-full items-center justify-center gap-2 rounded-full px-4 py-3 text-center text-[0.96rem] font-semibold text-app-text transition hover:-translate-y-0.5 sm:px-6 sm:text-base"
             >
               <Camera className="h-5 w-5" />
               Sign in
             </Link>
             <Link
               href="/signup"
-              className="liquid-glass inline-flex max-w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-center text-base font-semibold text-app-text transition hover:-translate-y-0.5 sm:px-6"
+              className="liquid-glass inline-flex max-w-full items-center justify-center gap-2 rounded-full px-4 py-3 text-center text-[0.96rem] font-semibold text-app-text transition hover:-translate-y-0.5 sm:px-6 sm:text-base"
             >
               <Sparkles className="h-5 w-5" />
               Request family access
@@ -103,7 +103,7 @@ export default function Home() {
           </p>
         </MotionSection>
 
-        <MotionSection delay={0.12}>
+        <MotionSection delay={0.12} className="min-w-0">
           <HomeSlideshow slides={previewImages} />
         </MotionSection>
       </section>

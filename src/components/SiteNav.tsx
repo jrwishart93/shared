@@ -41,9 +41,9 @@ export function SiteNav() {
   return (
     <>
       <header className="sticky top-0 z-30 border-b border-app-border bg-app-glass backdrop-blur-2xl">
-        <nav className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-3 py-2 sm:px-5 sm:py-3 lg:px-8 lg:py-4">
-          <Link href="/" className="flex min-w-0 items-center gap-2.5 sm:gap-3">
-            <span className="group relative grid h-12 w-12 flex-none place-items-center sm:h-16 sm:w-16 lg:h-20 lg:w-20">
+        <nav className="mx-auto flex max-w-7xl items-center justify-between gap-2.5 px-3 py-1.5 sm:px-5 sm:py-3 lg:px-8 lg:py-4">
+          <Link href="/" className="flex min-w-0 items-center gap-2 sm:gap-3">
+            <span className="group relative grid h-10 w-10 flex-none place-items-center sm:h-16 sm:w-16 lg:h-20 lg:w-20">
               <span className="absolute inset-2 rounded-full bg-app-accent/20 blur-xl transition duration-500 group-hover:scale-125 group-hover:bg-app-accent/30" />
               <Image
                 src="/images/albums/logo-image/family-adventures-logo.png"
@@ -55,10 +55,10 @@ export function SiteNav() {
               />
             </span>
             <span className="block min-w-0">
-              <span className="block truncate text-sm font-semibold leading-5 text-app-text sm:text-base">
+              <span className="block truncate text-[0.95rem] font-semibold leading-5 text-app-text sm:text-base">
                 Online Family Album
               </span>
-              <span className="block truncate text-[11px] font-medium text-app-subtle sm:text-xs">
+              <span className="block truncate text-[10px] font-medium text-app-subtle sm:text-xs">
                 Private family memories
               </span>
             </span>
@@ -124,7 +124,7 @@ export function SiteNav() {
         </nav>
       </header>
 
-      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-app-border bg-app-glass px-2.5 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] pt-2 backdrop-blur-2xl lg:hidden">
+      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-app-border bg-app-glass px-2.5 pb-[calc(env(safe-area-inset-bottom)+0.65rem)] pt-2 backdrop-blur-2xl lg:hidden">
         <div className="mx-auto flex max-w-md gap-1.5 rounded-[1.75rem] border border-app-border bg-app-card/55 p-1.5 shadow-2xl shadow-black/10">
           <Link href="/" className={mobileTabClass("/")}>
             <Home className="h-5 w-5" />
