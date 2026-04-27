@@ -2,13 +2,36 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useEffect, useMemo, useState } from "react";
 import { CalendarDays, Images, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
 import type { Album } from "@/lib/albums";
 
 export function AlbumCard({ album }: { album: Album }) {
-  const imageSrc = album.coverImage || album.fallbackCoverImage || "/window.svg";
+  const slideshowImages = useMemo(
+    () =>
+      album.photos && album.photos.length > 0
+        ? album.photos
+        : [album.coverImage || album.fallbackCoverImage || "/window.svg"],
+    [album.coverImage, album.fallbackCoverImage, album.photos],
+  );
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const imageSrc = slideshowImages[activeImageIndex] || "/window.svg";
   const cardHref = album.openInNewTab ? album.icloudUrl : `/albums/${album.slug}`;
+
+  useEffect(() => {
+    if (slideshowImages.length < 2) {
+      return;
+    }
+
+    const interval = window.setInterval(() => {
+      setActiveImageIndex((currentIndex) =>
+        currentIndex === slideshowImages.length - 1 ? 0 : currentIndex + 1,
+      );
+    }, 3800);
+
+    return () => window.clearInterval(interval);
+  }, [slideshowImages]);
 
   return (
     <motion.article
@@ -27,13 +50,15 @@ export function AlbumCard({ album }: { album: Album }) {
           className="absolute inset-0 z-10"
         />
       ) : null}
-      <Image
-        src={imageSrc}
-        alt={album.title}
-        width={1200}
-        height={720}
-        className="h-56 w-full object-cover"
-      />
+      <div className="relative h-56 w-full overflow-hidden">
+        <Image
+          src={imageSrc}
+          alt={album.title}
+          width={1200}
+          height={720}
+          className="ken-burns-slide h-56 w-full object-cover"
+        />
+      </div>
       <div className="p-5 sm:p-6">
         <div className="flex flex-wrap gap-2">
           {album.tags.map((tag) => (
@@ -70,6 +95,16 @@ export function AlbumCard({ album }: { album: Album }) {
           <Images className="h-5 w-5" />
           {album.openInNewTab ? "Open album" : "View album"}
         </Link>
+        {album.openInNewTab ? (
+          <Link
+            href={cardHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="relative z-20 mt-3 inline-flex w-full items-center justify-center text-sm font-semibold text-app-accent transition hover:underline"
+          >
+            View all images
+          </Link>
+        ) : null}
       </div>
     </motion.article>
   );
