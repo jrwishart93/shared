@@ -55,14 +55,16 @@ export default async function AlbumPage({
     <ProtectedRoute>
       <main className="min-h-[calc(100vh-73px)] bg-app-bg px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
         <MotionSection className="liquid-panel mx-auto max-w-5xl overflow-hidden rounded-3xl">
-          <Image
-            src={imageSrc}
-            alt={album.title}
-            width={1200}
-            height={800}
-            priority
-            className="h-72 w-full object-cover sm:h-[28rem]"
-          />
+          <a href={album.icloudUrl} target="_blank" rel="noopener noreferrer">
+            <Image
+              src={imageSrc}
+              alt={album.title}
+              width={1200}
+              height={800}
+              priority
+              className="h-72 w-full object-cover sm:h-[28rem]"
+            />
+          </a>
           <div className="p-5 sm:p-8">
             <Link
               href="/albums"
@@ -110,6 +112,14 @@ export default async function AlbumPage({
                 </span>
               ))}
             </div>
+            <a
+              href={album.icloudUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 inline-flex text-sm font-semibold text-app-accent transition hover:underline"
+            >
+              View all images
+            </a>
             <p className="mt-6 rounded-2xl bg-app-warm p-4 text-sm text-app-warm-text">
               This opens the shared iCloud album in a new tab.
             </p>
