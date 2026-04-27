@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Apple,
@@ -11,8 +11,11 @@ import {
   UserPlus,
 } from "lucide-react";
 import { MotionSection } from "@/components/MotionSection";
+import { WelcomeAnimation } from "@/components/WelcomeAnimation";
 import { useAuth } from "@/context/AuthContext";
 import { familyQuestions } from "@/lib/familyQuestions";
+
+const WELCOME_DELAY_MS = 1300;
 
 function shuffleItems<T>(items: T[]) {
   const shuffled = [...items];
@@ -30,18 +33,61 @@ function shuffleItems<T>(items: T[]) {
 
 export default function SignupPage() {
   const router = useRouter();
-  const { signup, signupWithApple, signupWithGoogle, firebaseReady } = useAuth();
+  const {
+    authError,
+    clearAuthError,
+    currentUser,
+    firebaseReady,
+    loading,
+    signup,
+    signupWithApple,
+    signupWithGoogle,
+    userProfile,
+  } = useAuth();
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [verified, setVerified] = useState(false);
   const [gateError, setGateError] = useState("");
   const [form, setForm] = useState({ name: "", email: "", password: "" });
-  const [error, setError] = useState("");
+  const [error, setError] = useState(() => {
+    if (typeof window === "undefined") {
+      return "";
+    }
+
+    const redirectError = window.sessionStorage.getItem(
+      "firebase-auth-redirect-error",
+    );
+
+    if (redirectError) {
+      window.sessionStorage.removeItem("firebase-auth-redirect-error");
+    }
+
+    return redirectError ?? "";
+  });
   const [submitting, setSubmitting] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(false);
+  const visibleError = error || authError;
   const [displayQuestions, setDisplayQuestions] = useState<
     typeof familyQuestions
   >(
     [],
   );
+
+  const routeAfterWelcome = useCallback(() => {
+    setShowWelcome(true);
+    window.setTimeout(() => {
+      router.replace("/albums");
+    }, WELCOME_DELAY_MS);
+  }, [router]);
+
+  useEffect(() => {
+    if (!loading && currentUser && userProfile) {
+      const welcomeTimer = window.setTimeout(() => {
+        routeAfterWelcome();
+      }, 0);
+
+      return () => window.clearTimeout(welcomeTimer);
+    }
+  }, [currentUser, loading, routeAfterWelcome, userProfile]);
 
   useEffect(() => {
     const shuffleTimer = window.setTimeout(() => {
@@ -120,12 +166,13 @@ export default function SignupPage() {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    clearAuthError();
     setError("");
     setSubmitting(true);
 
     try {
       await signup(form.name, form.email, form.password);
-      router.push("/albums");
+      routeAfterWelcome();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to create account.");
     } finally {
@@ -134,6 +181,7 @@ export default function SignupPage() {
   }
 
   async function handleSocialSignup(provider: "apple" | "google") {
+    clearAuthError();
     setError("");
     setSubmitting(true);
 
@@ -144,7 +192,7 @@ export default function SignupPage() {
         await signupWithGoogle();
       }
 
-      router.push("/albums");
+      routeAfterWelcome();
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Unable to create account.",
@@ -156,6 +204,9 @@ export default function SignupPage() {
 
   return (
     <main className="min-h-[calc(100vh-73px)] bg-app-bg px-5 py-10 sm:px-8">
+      {showWelcome ? (
+        <WelcomeAnimation message="Your family account is ready." />
+      ) : null}
       <MotionSection className="liquid-panel mx-auto max-w-3xl rounded-3xl p-6 sm:p-8">
         <div className="mb-8">
           <div className="liquid-button mb-4 grid h-12 w-12 place-items-center rounded-full">
@@ -308,7 +359,9 @@ export default function SignupPage() {
                   className="mt-2 w-full rounded-2xl border border-app-border bg-app-card-strong px-4 py-3 outline-none transition focus:border-app-accent focus:ring-4 focus:ring-app-accent/15"
                 />
               </label>
-              {error ? <p className="text-sm text-red-700">{error}</p> : null}
+              {visibleError ? (
+                <p className="text-sm text-red-700">{visibleError}</p>
+              ) : null}
               <button
                 type="submit"
                 disabled={submitting || !firebaseReady}

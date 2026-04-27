@@ -2,28 +2,75 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { FormEvent, Suspense, useState } from "react";
+import { FormEvent, Suspense, useCallback, useEffect, useState } from "react";
 import { Apple, Globe2, LogIn } from "lucide-react";
 import { MotionSection } from "@/components/MotionSection";
+import { WelcomeAnimation } from "@/components/WelcomeAnimation";
 import { useAuth } from "@/context/AuthContext";
+
+const WELCOME_DELAY_MS = 1300;
 
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { login, loginWithApple, loginWithGoogle, firebaseReady } = useAuth();
+  const {
+    authError,
+    clearAuthError,
+    currentUser,
+    firebaseReady,
+    loading,
+    login,
+    loginWithApple,
+    loginWithGoogle,
+    userProfile,
+  } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState(() => {
+    if (typeof window === "undefined") {
+      return "";
+    }
+
+    const redirectError = window.sessionStorage.getItem(
+      "firebase-auth-redirect-error",
+    );
+
+    if (redirectError) {
+      window.sessionStorage.removeItem("firebase-auth-redirect-error");
+    }
+
+    return redirectError ?? "";
+  });
   const [submitting, setSubmitting] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(false);
+  const visibleError = error || authError;
+
+  const routeAfterWelcome = useCallback((destination: string) => {
+    setShowWelcome(true);
+    window.setTimeout(() => {
+      router.replace(destination);
+    }, WELCOME_DELAY_MS);
+  }, [router]);
+
+  useEffect(() => {
+    if (!loading && currentUser && userProfile) {
+      const welcomeTimer = window.setTimeout(() => {
+        routeAfterWelcome(searchParams.get("next") ?? "/albums");
+      }, 0);
+
+      return () => window.clearTimeout(welcomeTimer);
+    }
+  }, [currentUser, loading, routeAfterWelcome, searchParams, userProfile]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setError("");
-    setSubmitting(true);
+    clearAuthError();
+      setError("");
+      setSubmitting(true);
 
     try {
       await login(email, password);
-      router.push(searchParams.get("next") ?? "/albums");
+      routeAfterWelcome(searchParams.get("next") ?? "/albums");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to sign in.");
     } finally {
@@ -32,6 +79,7 @@ function LoginForm() {
   }
 
   async function handleSocialLogin(provider: "apple" | "google") {
+    clearAuthError();
     setError("");
     setSubmitting(true);
 
@@ -42,7 +90,7 @@ function LoginForm() {
         await loginWithGoogle();
       }
 
-      router.push(searchParams.get("next") ?? "/albums");
+      routeAfterWelcome(searchParams.get("next") ?? "/albums");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to sign in.");
     } finally {
@@ -52,6 +100,7 @@ function LoginForm() {
 
   return (
     <main className="grid min-h-[calc(100vh-73px)] place-items-center bg-app-bg px-5 py-12">
+      {showWelcome ? <WelcomeAnimation /> : null}
       <MotionSection className="liquid-panel w-full max-w-md rounded-3xl p-6 sm:p-8">
         <div className="mb-6">
           <div className="liquid-button mb-4 grid h-12 w-12 place-items-center rounded-full">
@@ -119,7 +168,9 @@ function LoginForm() {
               className="mt-2 w-full rounded-2xl border border-app-border bg-app-card-strong px-4 py-3 text-app-text outline-none transition focus:border-app-accent focus:ring-4 focus:ring-app-accent/15"
             />
           </label>
-          {error ? <p className="text-sm text-red-700">{error}</p> : null}
+          {visibleError ? (
+            <p className="text-sm text-red-700">{visibleError}</p>
+          ) : null}
           <button
             type="submit"
             disabled={submitting || !firebaseReady}
