@@ -17,6 +17,7 @@ export type Album = {
   people?: string[];
   photos?: string[];
   storageProvider?: "icloud" | "firebase" | "cloudinary";
+  openInNewTab?: boolean;
 };
 
 export const albums: Album[] = [
@@ -36,6 +37,23 @@ export const albums: Album[] = [
     featured: true,
     photos: [],
     storageProvider: "icloud",
+  },
+  {
+    title: "Dunedin’s 1st Birthday",
+    slug: "dunedins-1st-birthday",
+    year: "2026",
+    date: "2026",
+    location: "Family celebration",
+    description:
+      "A special shared collection celebrating Dunedin’s first birthday with family.",
+    coverImage: "/images/albums/home-page-images/Dunedins_1st_birthday.JPG",
+    icloudUrl: "https://www.icloud.com/sharedalbum/#B2V5BydzF9comu",
+    visibility: "private",
+    tags: ["Birthday", "Family", "Dunedin"],
+    createdAt: "2026-04-27",
+    featured: false,
+    storageProvider: "icloud",
+    openInNewTab: true,
   },
   {
     title: "Camping Trip",

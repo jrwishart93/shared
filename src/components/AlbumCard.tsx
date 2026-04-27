@@ -8,6 +8,7 @@ import type { Album } from "@/lib/albums";
 
 export function AlbumCard({ album }: { album: Album }) {
   const imageSrc = album.coverImage || album.fallbackCoverImage || "/window.svg";
+  const cardHref = album.openInNewTab ? album.icloudUrl : `/albums/${album.slug}`;
 
   return (
     <motion.article
@@ -15,8 +16,17 @@ export function AlbumCard({ album }: { album: Album }) {
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -4 }}
       transition={{ duration: 0.28, ease: "easeOut" }}
-      className="liquid-panel overflow-hidden rounded-3xl"
+      className="liquid-panel relative overflow-hidden rounded-3xl"
     >
+      {album.openInNewTab ? (
+        <Link
+          href={cardHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Open ${album.title} album in iCloud`}
+          className="absolute inset-0 z-10"
+        />
+      ) : null}
       <Image
         src={imageSrc}
         alt={album.title}
@@ -52,11 +62,13 @@ export function AlbumCard({ album }: { album: Album }) {
           {album.description}
         </p>
         <Link
-          href={`/albums/${album.slug}`}
-          className="liquid-button mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-3 font-semibold transition hover:-translate-y-0.5"
+          href={cardHref}
+          target={album.openInNewTab ? "_blank" : undefined}
+          rel={album.openInNewTab ? "noopener noreferrer" : undefined}
+          className="liquid-button relative z-20 mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-3 font-semibold transition hover:-translate-y-0.5"
         >
           <Images className="h-5 w-5" />
-          View album
+          {album.openInNewTab ? "Open album" : "View album"}
         </Link>
       </div>
     </motion.article>
