@@ -70,6 +70,17 @@ export function HomeSlideshow({ slides }: HomeSlideshowProps) {
 
         <div className="absolute inset-0 bg-gradient-to-t from-black/62 via-black/10 to-transparent" />
 
+        <div className="absolute top-0 inset-x-0 h-0.5 z-10 bg-white/15">
+          <motion.div
+            key={`progress-${activeIndex}-${isPlaying}`}
+            className="h-full bg-white/75"
+            initial={{ scaleX: 0 }}
+            animate={isPlaying ? { scaleX: 1 } : { scaleX: 0 }}
+            transition={isPlaying ? { duration: 4.5, ease: "linear" } : { duration: 0 }}
+            style={{ transformOrigin: "left" }}
+          />
+        </div>
+
         <div className="absolute left-3 right-3 top-3 flex items-center justify-between gap-3 sm:left-4 sm:right-4 sm:top-4">
           <div className="liquid-glass inline-flex max-w-[calc(100%-3.25rem)] items-center gap-2 rounded-full px-3 py-2 text-xs font-semibold text-white sm:text-sm">
             <Images className="h-4 w-4 flex-none" />

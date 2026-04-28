@@ -143,6 +143,8 @@ span {
 }
 
 .liquid-button {
+  position: relative;
+  overflow: hidden;
   background: linear-gradient(135deg, var(--app-accent), var(--app-accent-strong));
   color: #ffffff;
   box-shadow: 0 16px 38px color-mix(in srgb, var(--app-accent) 28%, transparent);
@@ -152,6 +154,58 @@ span {
   .liquid-button {
     color: #061110;
   }
+}
+
+@keyframes btn-shimmer {
+  0% { transform: translateX(-100%) skewX(-15deg); }
+  100% { transform: translateX(300%) skewX(-15deg); }
+}
+
+.liquid-button::after {
+  content: "";
+  position: absolute;
+  inset-y: 0;
+  left: 0;
+  width: 35%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.btn-interactive:hover {
+  transform: translateY(-2px);
+}
+
+.btn-interactive:hover::after {
+  opacity: 1;
+  animation: btn-shimmer 0.65s ease-in-out;
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, var(--app-card-strong), var(--app-glass));
+  border: 1.5px solid color-mix(in srgb, var(--app-accent) 45%, var(--app-border));
+  box-shadow: var(--app-shadow-soft);
+  backdrop-filter: blur(22px) saturate(1.35);
+  -webkit-backdrop-filter: blur(22px) saturate(1.35);
+  color: var(--app-accent);
+  min-width: 0;
+}
+
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  border-color: var(--app-accent);
+}
+
+.text-gradient-hero {
+  background: linear-gradient(
+    135deg,
+    var(--app-accent) 0%,
+    color-mix(in srgb, var(--app-accent) 55%, var(--app-warm-text)) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 @keyframes logo-float {
@@ -188,6 +242,10 @@ span {
   }
 
   .ken-burns-slide {
+    animation: none;
+  }
+
+  .btn-interactive:hover::after {
     animation: none;
   }
 }
